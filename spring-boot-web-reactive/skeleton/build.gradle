@@ -1,12 +1,15 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.1.1'
-	id 'io.spring.dependency-management' version '1.1.0'
+	id 'org.springframework.boot' version '3.1.2'
+  id 'io.spring.dependency-management' version '1.1.2'
 }
 
 group = 'com.example.${{values.java_package_name}}'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+
+java {
+  sourceCompatibility = '17'
+}
 
 repositories {
 	mavenCentral()
@@ -32,9 +35,11 @@ tasks.named('bootBuildImage') {
 
 	if (System.getProperty( "os.arch" ).toLowerCase().startsWith('aarch')) {
  		// This builder is only for ARM64 systems.
- 		// For more info: https://github.com/thomasvitale/paketo-arm64
- 		builder = "ghcr.io/thomasvitale/builder-arm:tiny"
- 	}
+ 		// For more info: https://github.com/dashaun/paketo-arm64
+ 		builder = "docker.io/dashaun/builder-arm:tiny"
+ 	} else {
+		builder = "docker.io/paketobuildpacks/builder-jammy-tiny"
+	}
 
 	imageName = '${{values.artifact_id}}'
 	
